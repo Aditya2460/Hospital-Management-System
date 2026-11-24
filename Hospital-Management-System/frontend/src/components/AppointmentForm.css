@@ -1,0 +1,41 @@
+.appointment-form {
+  max-width: 980px;
+  margin: 0 auto 70px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 38px;
+  box-shadow: var(--shadow);
+}
+.appointment-form h2 {
+  margin-bottom: 8px;
+}
+.appointment-form form {
+  gap: 16px;
+}
+.appointment-form form > div:has(input[type="checkbox"]) {
+  align-items: center;
+  justify-content: flex-start !important;
+  padding: 8px 0;
+}
+.appointment-form form > div:has(input[type="checkbox"]) p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.appointment-form input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px;
+  accent-color: var(--primary);
+  flex: none !important;
+}
+.appointment-form button {
+  align-self: flex-start !important;
+  margin: 6px 0 0 !important;
+}
+@media (max-width: 650px) {
+  .appointment-form {
+    padding: 24px 18px;
+    margin-bottom: 38px;
+  }
+}
