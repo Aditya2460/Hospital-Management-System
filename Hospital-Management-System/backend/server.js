@@ -1,4 +1,3 @@
-
 import { config } from "dotenv";
 
 // Load environment variables first
@@ -21,5 +20,5 @@ console.log("Cloudinary configuration:", {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server listening at port ${process.env.PORT}`);
+  console.log(`Server listening at port http://localhost:${process.env.PORT}`);
 });
