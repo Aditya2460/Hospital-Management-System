@@ -1,68 +1,6 @@
-// import express from "express";
-// import { dbConnection } from "./database/dbConnection.js";
-// import { config } from "dotenv";
-// import dotenv from "dotenv";
-// import cookieParser from "cookie-parser";
-// import cors from "cors";
-// import fileUpload from "express-fileupload";
-// import { errorMiddleware } from "./middlewares/error.js";
-// import messageRouter from "./router/messageRouter.js";
-// import userRouter from "./router/userRouter.js";
-// import appointmentRouter from "./router/appointmentRouter.js";
-
-// const app = express();
-// dotenv.config();
-
-
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "http://localhost:5174",
-//   process.env.FRONTEND_URL_ONE,
-//   process.env.FRONTEND_URL_TWO,
-// ].filter(Boolean);
-
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         console.log("Blocked CORS origin:", origin);
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     credentials: true,
-//   }),
-// );
-
-// app.use(cookieParser());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
-// app.use(
-//   fileUpload({
-//     useTempFiles: true,
-//     tempFileDir: "/tmp/",
-//   }),
-// );
-// app.get("/", (req, res) => {
-//   res.send("Hello");
-// });
-// app.use("/api/v1/message", messageRouter);
-// app.use("/api/v1/user", userRouter);
-// app.use("/api/v1/appointment", appointmentRouter);
-
-// dbConnection();
-
-// app.use(errorMiddleware);
-// export default app;
-
-
-
-
 import express from "express";
 import { dbConnection } from "./database/dbConnection.js";
+import { config } from "dotenv";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -72,77 +10,52 @@ import messageRouter from "./router/messageRouter.js";
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
 
+const app = express();
 dotenv.config();
 
-const app = express();
 
-// 1. Allowed frontend origins
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   process.env.FRONTEND_URL_ONE,
   process.env.FRONTEND_URL_TWO,
-]
-  .filter(Boolean)
-  .map((url) => url.trim().replace(/\/$/, ""));
+].filter(Boolean);
 
-// 2. CORS configuration
 app.use(
   cors({
-    origin: (origin, callback) => {
-      console.log("Incoming CORS Origin:", origin);
-      console.log("Allowed Origins:", allowedOrigins);
-
+    origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
+        callback(null, true);
+      } else {
+        console.log("Blocked CORS origin:", origin);
+        callback(new Error("Not allowed by CORS"));
       }
-
-      console.log("CORS BLOCKED:", origin);
-      return callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
-  })
+  }),
 );
 
-// 3. Log every incoming request
-app.use((req, res, next) => {
-  console.log("Incoming Request:", {
-    method: req.method,
-    url: req.originalUrl,
-    origin: req.headers.origin,
-  });
-
-  next();
-});
-
-// 4. Common middleware
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 5. File upload middleware
 app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
-  })
+  }),
 );
-
-// 6. Health check route
 app.get("/", (req, res) => {
-  res.status(200).send("Hello");
+  res.send("Hello");
 });
-
-// 7. API routes
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
 
-// 8. Database connection
 dbConnection();
 
-// 9. Error handling middleware
 app.use(errorMiddleware);
-
 export default app;
+
+
