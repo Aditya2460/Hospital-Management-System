@@ -13,7 +13,6 @@ import appointmentRouter from "./router/appointmentRouter.js";
 const app = express();
 dotenv.config();
 
-import cors from "cors";
 
 const allowedOrigins = [
   "http://localhost:5173",
